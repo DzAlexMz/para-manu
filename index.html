@@ -8,6 +8,7 @@
         body {
             background: linear-gradient(135deg, #FFD1DC, #FFC0CB);
             font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
         }
         .heart {
             animation: pulse 1s infinite;
@@ -41,11 +42,65 @@
             0% { opacity: 1; transform: scale(0.5) rotate(0deg); }
             100% { opacity: 0; transform: scale(2) rotate(360deg); }
         }
+        
+        /* Nuevas animaciones de fondo */
+        .background-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .floating-heart {
+            position: absolute;
+            color: rgba(255, 192, 203, 0.5);
+            font-size: 20px;
+            animation: float linear infinite;
+        }
+        @keyframes float {
+            0% { 
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            100% { 
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 1;
+            }
+        }
+        
+        /* Animación de entrada */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-slide-in {
+            animation: slideIn 1s ease-out;
+        }
+        
+        /* Efecto de brillo */
+        @keyframes shine {
+            0% { text-shadow: none; }
+            50% { text-shadow: 0 0 10px pink, 0 0 20px hotpink; }
+            100% { text-shadow: none; }
+        }
+        .shine-text {
+            animation: shine 3s infinite;
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4">
-    <div class="bg-white bg-opacity-80 rounded-xl p-8 text-center shadow-2xl max-w-xl w-full">
-        <h1 class="text-4xl font-bold text-pink-600 mb-6">¡Feliz Cumpleaños, Manu!</h1>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 relative">
+    <div class="background-hearts" id="background-hearts"></div>
+    
+    <div class="bg-white bg-opacity-80 rounded-xl p-8 text-center shadow-2xl max-w-xl w-full animate-slide-in">
+        <h1 class="text-4xl font-bold text-pink-600 mb-6 shine-text">¡Feliz Cumpleaños, Manu!</h1>
         
         <div class="mb-6">
             <img src="/api/placeholder/300/300" alt="Manu" class="mx-auto rounded-full w-48 h-48 object-cover heart">
@@ -99,6 +154,7 @@
         const wishBtn = document.getElementById('wishBtn');
         const heartsContainer = document.getElementById('hearts-container');
         const sparklsContainer = document.getElementById('sparkles-container');
+        const backgroundHearts = document.getElementById('background-hearts');
 
         const cats = [
             document.getElementById('cat1'),
@@ -140,6 +196,18 @@
             }, 3000);
         }
 
+        function createBackgroundHearts() {
+            for (let i = 0; i < 50; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.classList.add('floating-heart');
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.animationDuration = `${Math.random() * 20 + 10}s`;
+                heart.style.animationDelay = `-${Math.random() * 20}s`;
+                backgroundHearts.appendChild(heart);
+            }
+        }
+
         function createSparkle(x, y) {
             const sparkle = document.createElement('div');
             sparkle.innerHTML = '✨';
@@ -158,7 +226,7 @@
         }
 
         cats.forEach(cat => {
-            cat.addEventListener('click', () => {
+            cat.addEventListener('click', (event) => {
                 alert(catMessages[Math.floor(Math.random() * catMessages.length)]);
                 createSparkle(event.clientX, event.clientY);
             });
@@ -179,6 +247,7 @@
 
         typeMessage();
         setInterval(typeMessage, 10000);
+        createBackgroundHearts();
     </script>
 </body>
 </html>
