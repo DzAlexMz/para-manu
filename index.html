@@ -23,6 +23,24 @@
         .birthday-balloon:hover {
             transform: translateY(-20px);
         }
+        .cat {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .cat:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+        .sparkle {
+            position: absolute;
+            color: gold;
+            font-size: 20px;
+            pointer-events: none;
+            animation: sparkle 1s ease-out;
+        }
+        @keyframes sparkle {
+            0% { opacity: 1; transform: scale(0.5) rotate(0deg); }
+            100% { opacity: 0; transform: scale(2) rotate(360deg); }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
@@ -46,7 +64,20 @@
             </button>
         </div>
 
+        <div class="cat-section flex justify-center space-x-4 mb-6">
+            <div id="cat1" class="cat w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center text-4xl">🐱</div>
+            <div id="cat2" class="cat w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center text-4xl">😺</div>
+            <div id="cat3" class="cat w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center text-4xl">🐈</div>
+        </div>
+
+        <div class="balloon-section flex justify-center space-x-4 mb-6">
+            <div id="balloon1" class="birthday-balloon text-4xl cursor-pointer">🎈</div>
+            <div id="balloon2" class="birthday-balloon text-4xl cursor-pointer">🎉</div>
+            <div id="balloon3" class="birthday-balloon text-4xl cursor-pointer">🎊</div>
+        </div>
+
         <div id="hearts-container" class="relative h-24"></div>
+        <div id="sparkles-container" class="absolute top-0 left-0 w-full h-full pointer-events-none"></div>
     </div>
 
     <script>
@@ -57,10 +88,29 @@
             "Te amo más que ayer, menos que mañana 💕"
         ];
 
+        const catMessages = [
+            "¡Miau! Un abrazo para Manu 🤗",
+            "Los gatos piensan que eres especial 🐾",
+            "¡Feliz cumpleaños desde el reino gatuno! 🐱"
+        ];
+
         const typingMessage = document.getElementById('love-message');
         const heartBtn = document.getElementById('heartBtn');
         const wishBtn = document.getElementById('wishBtn');
         const heartsContainer = document.getElementById('hearts-container');
+        const sparklsContainer = document.getElementById('sparkles-container');
+
+        const cats = [
+            document.getElementById('cat1'),
+            document.getElementById('cat2'),
+            document.getElementById('cat3')
+        ];
+
+        const balloons = [
+            document.getElementById('balloon1'),
+            document.getElementById('balloon2'),
+            document.getElementById('balloon3')
+        ];
 
         function typeMessage() {
             const message = loveMessages[Math.floor(Math.random() * loveMessages.length)];
@@ -90,9 +140,39 @@
             }, 3000);
         }
 
+        function createSparkle(x, y) {
+            const sparkle = document.createElement('div');
+            sparkle.innerHTML = '✨';
+            sparkle.classList.add('sparkle');
+            sparkle.style.left = `${x}px`;
+            sparkle.style.top = `${y}px`;
+            sparklsContainer.appendChild(sparkle);
+
+            setTimeout(() => {
+                sparkle.remove();
+            }, 1000);
+        }
+
         function showWish() {
             alert('Deseo: Que todos tus sueños se hagan realidad y que siempre estés rodeada de amor y felicidad. ¡Te amo, Manu! 💖');
         }
+
+        cats.forEach(cat => {
+            cat.addEventListener('click', () => {
+                alert(catMessages[Math.floor(Math.random() * catMessages.length)]);
+                createSparkle(event.clientX, event.clientY);
+            });
+        });
+
+        balloons.forEach(balloon => {
+            balloon.addEventListener('click', (event) => {
+                balloon.classList.add('animate-bounce');
+                createSparkle(event.clientX, event.clientY);
+                setTimeout(() => {
+                    balloon.classList.remove('animate-bounce');
+                }, 1000);
+            });
+        });
 
         heartBtn.addEventListener('click', createHeart);
         wishBtn.addEventListener('click', showWish);
