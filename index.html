@@ -43,7 +43,6 @@
             100% { opacity: 0; transform: scale(2) rotate(360deg); }
         }
         
-        /* Nuevas animaciones de fondo */
         .background-hearts {
             position: fixed;
             top: 0;
@@ -70,7 +69,6 @@
             }
         }
         
-        /* Animación de entrada */
         @keyframes slideIn {
             from {
                 opacity: 0;
@@ -85,7 +83,6 @@
             animation: slideIn 1s ease-out;
         }
         
-        /* Efecto de brillo */
         @keyframes shine {
             0% { text-shadow: none; }
             50% { text-shadow: 0 0 10px pink, 0 0 20px hotpink; }
@@ -94,9 +91,53 @@
         .shine-text {
             animation: shine 3s infinite;
         }
+
+        /* Nuevo estilo para el modal de amor */
+        .love-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 192, 203, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+        }
+        .love-modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 600px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.2);
+        }
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .love-heart {
+            animation: heartBeat 1s infinite;
+            font-size: 5rem;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4 relative">
+    <div id="loveModal" class="love-modal">
+        <div class="love-modal-content">
+            <div class="love-heart text-center mb-4">❤️</div>
+            <h2 class="text-3xl font-bold text-pink-600 mb-4">¡Te Amo, Manu!</h2>
+            <p class="text-xl text-gray-800 mb-6">Quiero que sepas lo especial que eres para mí. Cada momento a tu lado es un regalo, y mi amor por ti crece cada día más. Eres mi persona favorita en todo el mundo. 💕</p>
+            <button id="closeLoveModal" class="bg-pink-500 text-white px-6 py-3 rounded-full hover:bg-pink-600 transition">
+                ¡Entendido, mi amor!
+            </button>
+        </div>
+    </div>
+
     <div class="background-hearts" id="background-hearts"></div>
     
     <div class="bg-white bg-opacity-80 rounded-xl p-8 text-center shadow-2xl max-w-xl w-full animate-slide-in">
@@ -167,6 +208,20 @@
             document.getElementById('balloon2'),
             document.getElementById('balloon3')
         ];
+
+        // Nuevo código para el modal de amor
+        document.addEventListener('DOMContentLoaded', () => {
+            const loveModal = document.getElementById('loveModal');
+            const closeLoveModalBtn = document.getElementById('closeLoveModal');
+
+            // Mostrar modal al cargar
+            loveModal.style.display = 'flex';
+
+            // Cerrar modal
+            closeLoveModalBtn.addEventListener('click', () => {
+                loveModal.style.display = 'none';
+            });
+        });
 
         function typeMessage() {
             const message = loveMessages[Math.floor(Math.random() * loveMessages.length)];
